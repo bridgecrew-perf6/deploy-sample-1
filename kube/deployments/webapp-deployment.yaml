@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+  labels:
+    app: webapp
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: webapp
+    tier: frontend
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+  labels:
+    app: webappp
+spec:
+  selector:
+    matchLabels:
+      app: webapp
+  strategy:
+    type: Recreate
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: webapp
+        tier: frontend
+    spec:
+      containers:
+      - image: ghcr.io/kijimad/webapp:686ca72
+        name: webapp
+        env:
+        - name: PASSENGER_APP_ENV
+          value: development
+        ports:
+        - containerPort: 80
+          name: webapp
+        imagePullPolicy: Always
