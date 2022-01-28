@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: setup
+spec:
+  template:
+    metadata:
+      name: setup
+    spec:
+      containers:
+      - name: setup
+        image: ghcr.io/kijimad/webapp:686ca72
+        command: ["/bin/bash", "./setup.sh"]
+        env:
+        - name: PASSENGER_APP_ENV
+          value: Development
+      restartPolicy: Never
